@@ -26,7 +26,7 @@ const Catalog = () => {
     productsLoaded,
     filtersLoaded,
     brands,
-    types,
+    categories,
     productParams,
     metaData,
   } = useAppSelector((state) => state.catalog);
@@ -51,19 +51,19 @@ const Catalog = () => {
         <FiltersPanelDesktop
           sortOptions={sortOptions}
           brands={brands}
-          types={types}
+          categories={categories}
           orderBy={productParams.orderBy}
           checkedBrands={productParams.brands}
-          checkedTypes={productParams.types}
+          checkedCategories={productParams.categories}
         />
       ) : (
         <FiltersPanelMobile
           sortOptions={sortOptions}
           brands={brands}
-          types={types}
+          categories={categories}
           orderBy={productParams.orderBy}
           checkedBrands={productParams.brands}
-          checkedTypes={productParams.types}
+          checkedCategories={productParams.categories}
         />
       )}
       {metaData && metaData?.totalCount > 0 ? (

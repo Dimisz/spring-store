@@ -23,8 +23,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 24.99,
                 "https://i.ibb.co/ZYW3VTp/brown-brim.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
         productRepository.save(Product.of(
@@ -33,8 +33,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 17.99,
                 "https://i.ibb.co/ypkgK0X/blue-beanie.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
 
@@ -44,8 +44,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 34.99,
                 "https://i.ibb.co/QdJwgmp/brown-cowboy.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
         productRepository.save(Product.of(
@@ -54,8 +54,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 24.99,
                 "https://i.ibb.co/RjBLWxB/grey-brim.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
         productRepository.save(Product.of(
@@ -64,8 +64,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 17.99,
                 "https://i.ibb.co/YTjW3vF/green-beanie.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
         productRepository.save(Product.of(
@@ -74,8 +74,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 13.99,
                 "https://i.ibb.co/rKBDvJX/palm-tree-cap.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
         productRepository.save(Product.of(
@@ -84,8 +84,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 17.99,
                 "https://i.ibb.co/bLB646Z/red-beanie.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
         productRepository.save(Product.of(
@@ -94,8 +94,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 13.99,
                 "https://i.ibb.co/1f2nWMM/wolf-cap.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
         productRepository.save(Product.of(
@@ -104,8 +104,8 @@ public class ProductDataLoader {
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                 15.99,
                 "https://i.ibb.co/X2VJP2W/blue-snapback.png",
-                "Generic",
                 "Hats",
+                "Generic",
                 20
         ));
         productRepository.save(Product.of(

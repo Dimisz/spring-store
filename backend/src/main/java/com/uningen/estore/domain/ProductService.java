@@ -5,6 +5,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
@@ -16,9 +20,41 @@ public class ProductService {
     public Iterable<Product> viewProductList(){
         return productRepository.findAll();
     }
+//    public Page<Product> findAllByBrand(List<String> brand, List<String> category){
+//        return productRepository.findByBrandInOrCategoryInIgnoreCase(brand, category, PageRequest.of(0, 10));
+//    }
 
-    public Page<Product> findAllProductsPaginated(int pageNumber, int pageSize, String orderBy){
-        return productRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(orderBy)));
+    public Page<Product> findProductsPaginated(
+            int pageNumber,
+            int pageSize,
+            String orderBy,
+            List<String> brands,
+            List<String> categories,
+            List<String> searchTerms
+            ){
+        PageRequest pageRequest = switch (orderBy){
+            case "priceDesc":
+                yield PageRequest.of(pageNumber, pageSize, Sort.by("price").descending());
+            case "price":
+                yield PageRequest.of(pageNumber, pageSize, Sort.by("price"));
+            default:
+                yield PageRequest.of(pageNumber, pageSize, Sort.by("name"));
+        };
+
+        Set<String> searchParams = new HashSet<>();
+        if(searchTerms != null) searchParams.addAll(searchTerms);
+        if(categories != null) searchParams.addAll(categories);
+        if(brands != null) searchParams.addAll(brands);
+        if(!searchParams.isEmpty()){
+            return productRepository.findByNameInOrBrandInOrCategoryInIgnoreCase(searchParams, searchParams, searchParams, pageRequest);
+        }
+//        if(searchTerms != null){
+//            return productRepository.findByBrandContainsIgnoreCase(searchTerms, pageRequest);
+//        }
+//        if(brands != null || categories != null){
+//            return productRepository.findByBrandInOrCategoryInIgnoreCase(brands, categories, pageRequest);
+//        }
+        return productRepository.findAll(pageRequest);
     }
 
 //    public List<Product> viewProductsByCategory(String category){

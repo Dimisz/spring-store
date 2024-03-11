@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -37,14 +39,28 @@ public class ProductController {
 //    }
 
     @GetMapping
-    public Page<Product> getAllProductsPaginated(
+    public Page<Product> getProductsPaginated(
             @RequestParam int pageNumber,
             @RequestParam int pageSize,
-            @RequestParam String orderBy
+            @RequestParam String orderBy,
+            @RequestParam(required = false) List<String> brands,
+            @RequestParam(required = false) List<String> categories,
+            @RequestParam(required = false) String searchTerm
     ){
-        return productService.findAllProductsPaginated(pageNumber, pageSize, orderBy);
+        List<String> searchTerms = null;
+        if(searchTerm != null){
+            searchTerms = Arrays.stream(searchTerm.toLowerCase().trim().split(" ")).toList();
+        }
+
+//        System.out.println(types);
+        return productService.findProductsPaginated(pageNumber, pageSize, orderBy, brands, categories, searchTerms);
 
     }
+
+//    @GetMapping("brand")
+//    public Page<Product> getByBrand(@RequestParam(required = false) List<String> brand, @RequestParam(required = false) List<String> category){
+//        return productService.findAllByBrand(brand, category);
+//    }
 
     @GetMapping("filters")
     public ProductFilters getFilters(){

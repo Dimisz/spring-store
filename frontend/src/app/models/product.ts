@@ -4,7 +4,7 @@ export interface Product {
     description: string;
     price: number;
     pictureUrl: string;
-    type?: string;
+    category?: string;
     brand: string;
     quantityInStock?: number;
 }
@@ -12,7 +12,7 @@ export interface Product {
 export interface ProductParams {
     orderBy: string;
     searchTerm?: string;
-    types: string[];
+    categories: string[];
     brands: string[];
     pageNumber: number;
     pageSize: number;
