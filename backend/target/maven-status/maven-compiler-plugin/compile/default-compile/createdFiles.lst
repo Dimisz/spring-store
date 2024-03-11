@@ -1,0 +1,11 @@
+com/uningen/estore/domain/ProductFilters.class
+com/uningen/estore/web/ProductController.class
+com/uningen/estore/domain/ProductService.class
+com/uningen/estore/config/DataConfig.class
+com/uningen/estore/domain/ProductNotFoundException.class
+com/uningen/estore/domain/Product.class
+com/uningen/estore/domain/ProductRepository.class
+com/uningen/estore/web/ProductControllerAdvice.class
+com/uningen/estore/data/ProductDataLoader.class
+com/uningen/estore/domain/ProductAlreadyExistsException.class
+com/uningen/estore/CatalogServiceApplication.class

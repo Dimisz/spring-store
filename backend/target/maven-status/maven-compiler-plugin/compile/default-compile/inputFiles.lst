@@ -1,0 +1,11 @@
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/ProductRepository.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/web/ProductControllerAdvice.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/ProductAlreadyExistsException.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/data/ProductDataLoader.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/web/ProductController.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/ProductNotFoundException.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/CatalogServiceApplication.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/config/DataConfig.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/Product.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/ProductService.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/ProductFilters.java
