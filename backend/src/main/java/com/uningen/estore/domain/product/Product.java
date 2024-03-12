@@ -1,4 +1,4 @@
-package com.uningen.estore.domain;
+package com.uningen.estore.domain.product;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

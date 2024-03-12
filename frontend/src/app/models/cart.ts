@@ -4,7 +4,7 @@ export interface CartItem {
   price: number;
   pictureUrl: string;
   brand: string;
-  type: string;
+  category: string;
   quantity: number;
 }
 export interface Cart {

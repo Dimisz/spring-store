@@ -1,7 +1,7 @@
 package com.uningen.estore.web;
 
-import com.uningen.estore.domain.ProductAlreadyExistsException;
-import com.uningen.estore.domain.ProductNotFoundException;
+import com.uningen.estore.domain.product.ProductAlreadyExistsException;
+import com.uningen.estore.domain.product.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

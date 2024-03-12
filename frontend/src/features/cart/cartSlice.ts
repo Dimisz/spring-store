@@ -58,6 +58,8 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     setCart: (state, action) => {
+      console.log('from setter');
+      console.log(action);
       state.cart = action.payload
     },
     clearCart: (state) => {

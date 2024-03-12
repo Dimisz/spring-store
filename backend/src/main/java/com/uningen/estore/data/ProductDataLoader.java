@@ -1,7 +1,7 @@
 package com.uningen.estore.data;
 
-import com.uningen.estore.domain.Product;
-import com.uningen.estore.domain.ProductRepository;
+import com.uningen.estore.domain.product.Product;
+import com.uningen.estore.domain.product.ProductRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.uningen.estore.domain;
+package com.uningen.estore.domain.product;
 
 public class ProductNotFoundException extends RuntimeException{
     public ProductNotFoundException(Long id){

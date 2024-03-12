@@ -1,13 +1,11 @@
-package com.uningen.estore.domain;
+package com.uningen.estore.domain.product;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ProductService {
@@ -20,9 +18,14 @@ public class ProductService {
     public Iterable<Product> viewProductList(){
         return productRepository.findAll();
     }
-//    public Page<Product> findAllByBrand(List<String> brand, List<String> category){
-//        return productRepository.findByBrandInOrCategoryInIgnoreCase(brand, category, PageRequest.of(0, 10));
-//    }
+
+    public boolean checkAvailability(Long id, int qty){
+        return productRepository.existsById(id) && productRepository.findById(id).get().getQuantityInStock() >= qty;
+    }
+
+    public boolean existsById(Long id){
+        return productRepository.existsById(id);
+    }
 
     public Page<Product> findProductsPaginated(
             int pageNumber,
@@ -30,7 +33,7 @@ public class ProductService {
             String orderBy,
             List<String> brands,
             List<String> categories,
-            List<String> searchTerms
+            String searchTerms
             ){
         PageRequest pageRequest = switch (orderBy){
             case "priceDesc":
@@ -40,21 +43,21 @@ public class ProductService {
             default:
                 yield PageRequest.of(pageNumber, pageSize, Sort.by("name"));
         };
+        String searchTerm = searchTerms == null ? "" : searchTerms.trim().toLowerCase();
 
-        Set<String> searchParams = new HashSet<>();
-        if(searchTerms != null) searchParams.addAll(searchTerms);
-        if(categories != null) searchParams.addAll(categories);
-        if(brands != null) searchParams.addAll(brands);
-        if(!searchParams.isEmpty()){
-            return productRepository.findByNameInOrBrandInOrCategoryInIgnoreCase(searchParams, searchParams, searchParams, pageRequest);
+
+        if(categories != null && brands != null){
+            return productRepository.findByCategoryInOrBrandInAndNameContaining(categories, brands, searchTerm, pageRequest);
         }
-//        if(searchTerms != null){
-//            return productRepository.findByBrandContainsIgnoreCase(searchTerms, pageRequest);
-//        }
-//        if(brands != null || categories != null){
-//            return productRepository.findByBrandInOrCategoryInIgnoreCase(brands, categories, pageRequest);
-//        }
-        return productRepository.findAll(pageRequest);
+        else if(categories != null && brands == null){
+            return productRepository.findByCategoryInAndNameContaining(categories, searchTerm, pageRequest);
+        }
+        else if(categories == null && brands != null){
+            return productRepository.findByBrandInAndNameContaining(brands, searchTerm, pageRequest);
+        }
+        else {
+            return productRepository.findByNameContaining(searchTerm, pageRequest);
+        }
     }
 
 //    public List<Product> viewProductsByCategory(String category){

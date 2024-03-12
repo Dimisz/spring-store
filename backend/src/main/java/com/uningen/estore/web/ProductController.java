@@ -1,14 +1,13 @@
 package com.uningen.estore.web;
 
-import com.uningen.estore.domain.Product;
-import com.uningen.estore.domain.ProductFilters;
-import com.uningen.estore.domain.ProductService;
+import com.uningen.estore.domain.product.Product;
+import com.uningen.estore.domain.product.ProductFilters;
+import com.uningen.estore.domain.product.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,14 +46,7 @@ public class ProductController {
             @RequestParam(required = false) List<String> categories,
             @RequestParam(required = false) String searchTerm
     ){
-        List<String> searchTerms = null;
-        if(searchTerm != null){
-            searchTerms = Arrays.stream(searchTerm.toLowerCase().trim().split(" ")).toList();
-        }
-
-//        System.out.println(types);
-        return productService.findProductsPaginated(pageNumber, pageSize, orderBy, brands, categories, searchTerms);
-
+        return productService.findProductsPaginated(pageNumber, pageSize, orderBy, brands, categories, searchTerm);
     }
 
 //    @GetMapping("brand")
