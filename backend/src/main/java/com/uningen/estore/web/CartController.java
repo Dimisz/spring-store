@@ -35,8 +35,7 @@ public class CartController {
 //    }
 
     @PostMapping
-//    public ResponseEntity<Cart> addProductToCart(
-    public ResponseEntity<Optional<CartDTO>> addProductToCart(
+    public ResponseEntity<CartDTO> addProductToCart(
             @RequestParam Long productId,
             @RequestParam int quantity
     ){
@@ -48,22 +47,24 @@ public class CartController {
             if(cart == null) {
                 cartItems = new HashMap<>();
                 cartItems.put(productId, quantity);
+                productService.editProductQuantity(productId, -quantity);
                 cart = Cart.of(cartItems);
 //                return new ResponseEntity<>(cartService.saveCart(cart), HttpStatus.CREATED);
-                cartService.saveCart(cart);
-                return new ResponseEntity<>(Optional.of(cartService.getCartDTO(Optional.of(cart))), HttpStatus.OK);
+//                cartService.saveCart(cart);
+//                return new ResponseEntity<>(Optional.of(cartService.getCartDTO(Optional.of(cart))), HttpStatus.OK);
+                return new ResponseEntity<>(cartService.saveCartAndGetDTO(cart), HttpStatus.OK);
             }
             else{
                 cartItems = cart.getCartProducts();
                 if(cartItems.containsKey(productId)){
                     cartItems.put(productId, cartItems.get(productId) + quantity);
+                    productService.editProductQuantity(productId, -quantity);
                 }
                 else {
                     cartItems.put(productId, quantity);
+                    productService.editProductQuantity(productId, -quantity);
                 }
-//                return new ResponseEntity<>(cartService.saveCart(cart), HttpStatus.OK);
-                cartService.saveCart(cart);
-                return new ResponseEntity<>(Optional.of(cartService.getCartDTO(Optional.of(cart))), HttpStatus.OK);
+                return new ResponseEntity<>(cartService.saveCartAndGetDTO(cart), HttpStatus.OK);
             }
         }
         throw new InsufficientQuantityAvailableException(productId, quantity);
@@ -71,7 +72,7 @@ public class CartController {
 
     @DeleteMapping
 //    public ResponseEntity<Cart> removeProductFromCart(
-    public ResponseEntity<Optional<CartDTO>> removeProductFromCart(
+    public ResponseEntity<CartDTO> removeProductFromCart(
             @RequestParam Long productId,
             @RequestParam int quantity
     ){
@@ -80,20 +81,24 @@ public class CartController {
 
         Cart cart = cartService.getCartById(cartId).isPresent() ? cartService.getCartById(cartId).get() : null;
         if(cart == null) throw new CartNotFoundException(cartId);
+
         if(productService.existsById(productId)){
             Map<Long, Integer> cartItems = cart.getCartProducts();
             if(cartItems.containsKey(productId)){
                 int finalQty = cartItems.get(productId) - quantity >= 0 ? cartItems.get(productId) - quantity : 0;
                 if(finalQty <= 0) {
+                    productService.editProductQuantity(productId, cartItems.get(productId));
                     cartItems.remove(productId);
                 }
                 else {
                     cartItems.put(productId, finalQty);
+                    productService.editProductQuantity(productId, quantity);
                 }
 
 //                return new ResponseEntity<>(cartService.saveCart(cart), HttpStatus.OK);
-                cartService.saveCart(cart);
-                return new ResponseEntity<>(Optional.of(cartService.getCartDTO(Optional.of(cart))), HttpStatus.OK);
+//                cartService.saveCart(cart);
+//                return new ResponseEntity<>(Optional.of(cartService.getCartDTO(Optional.of(cart))), HttpStatus.OK);
+                return new ResponseEntity<>(cartService.saveCartAndGetDTO(cart), HttpStatus.OK);
             }
             else {
                 throw new ProductNotFoundException(productId);

@@ -102,4 +102,12 @@ public class ProductService {
                 }).orElseGet(() -> addProductToCatalog(product));
     }
 
+    public Product editProductQuantity(Long id, int newQty){
+        return productRepository.findById(id)
+                .map(existingProduct -> {
+                    existingProduct.setQuantityInStock(existingProduct.getQuantityInStock() + newQty);
+                    return productRepository.save(existingProduct);
+                }).orElseThrow();
+    }
+
 }

@@ -47,8 +47,12 @@ public class CartService {
     }
 
 
-    public Cart saveCart(Cart cart){
-        return cartRepository.save(cart);
+//    public Cart saveCart(Cart cart){
+//        return cartRepository.save(cart);
+//    }
+
+    public CartDTO saveCartAndGetDTO(Cart cart){
+        return getCartDTO(Optional.of(cartRepository.save(cart)));
     }
 
     public Iterable<Cart> getAllCarts(){

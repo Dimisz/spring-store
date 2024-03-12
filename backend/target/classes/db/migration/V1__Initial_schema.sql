@@ -1,6 +1,18 @@
 DROP TABLE IF EXISTS cart_product_mapping;
 DROP TABLE IF EXISTS carts;
 DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS app_user;
+DROP TABLE IF EXISTS app_user_seq;
+
+CREATE TABLE app_user (
+      id BIGINT AUTO_INCREMENT NOT NULL,
+      email VARCHAR(255),
+      first_name VARCHAR(255),
+      last_name VARCHAR(255),
+      user_password VARCHAR(255),
+      role enum ('USER','ADMIN'),
+      PRIMARY KEY (id)
+);
 
 CREATE TABLE carts (
      id BIGINT AUTO_INCREMENT NOT NULL,
