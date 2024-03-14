@@ -14,21 +14,18 @@ import java.util.Map;
 @Table(name = "carts")
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private String id;
+
+//    @Column(name = "user_email")
+//    private String userEmail;
 
     @ElementCollection
     @CollectionTable(name = "cart_product_mapping",
     joinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "id")})
     @MapKeyColumn(name = "product_id")
-    @Column(name = "cart_product")
+    @Column(name = "product_qty")
     private Map<Long, Integer> cartProducts; // productID : quantity
-
-    public static Cart of(Map<Long, Integer> cartItems){
-        return new Cart(null, cartItems);
-    }
-
 
 
 

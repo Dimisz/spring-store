@@ -1,7 +1,7 @@
 package com.uningen.estore.domain.cart;
 
 public class CartNotFoundException extends RuntimeException{
-    public CartNotFoundException(Long cartId){
+    public CartNotFoundException(String cartId){
         super("Could not find cart with id " + cartId);
     }
 }

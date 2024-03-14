@@ -6,11 +6,13 @@ server:
     threads:
       max: 50
       min-spare: 5
+#  servlet:
+#    session:
+#      cookie:
+#        http-only: true
+#        secure: true
 
 spring:
-#  jackson:
-#    serialization:
-#      FAIL_ON_EMPTY_BEANS: false
   application:
     name: catalog-service
   config:

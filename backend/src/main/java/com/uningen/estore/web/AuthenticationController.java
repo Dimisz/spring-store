@@ -5,14 +5,14 @@ import com.uningen.estore.auth.AuthenticationResponse;
 import com.uningen.estore.auth.AuthenticationService;
 import com.uningen.estore.auth.RegisterRequest;
 import com.uningen.estore.config.JwtService;
-import com.uningen.estore.domain.user.AppUser;
+import com.uningen.estore.domain.cart.CartService;
 import com.uningen.estore.domain.user.AppUserRepository;
+import com.uningen.estore.domain.user.UserDTO;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -23,6 +23,7 @@ public class AuthenticationController {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final AppUserRepository appUserRepository;
+    private final CartService cartService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
@@ -39,33 +40,25 @@ public class AuthenticationController {
     }
 
     @GetMapping("/currentUser")
-    public ResponseEntity<AppUser> getAppUser(@RequestHeader(value = "Authorization") String authHeader){
-//        if(!authHeader.startsWith("Bearer ")) return ResponseEntity.badRequest(new AppUser());
-        Optional<AppUser> currentUser = Optional.empty();
+    public ResponseEntity<UserDTO> getAppUser(
+            @RequestHeader(value = "Authorization") String authHeader,
+            @CookieValue(value = "userid", defaultValue = "unknown") String userIdFromCookie,
+            HttpServletResponse response
+            ){
+//        if(!authHeader.startsWith("Bearer ")) return ResponseEntity.badRequest();
+        UserDTO currentUser = new UserDTO();
         String jwtToken = authHeader.substring(7); //"Bearer <token>"
         // extract userEmail from token
-
         String userEmail = jwtService.extractUserEmail(jwtToken);
 
         if(userEmail != null) {
-            currentUser = appUserRepository.findByEmail(userEmail);
+            currentUser.setEmail(userEmail);
+            currentUser.setToken(jwtToken);
+            currentUser.setCart(cartService.saveCartAndGetDTO(cartService.transferCartUponLogin(userIdFromCookie, authHeader, response)));
         }
-//        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
-//            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-//            if(jwtService.isTokenValid(jwtToken, userDetails)){
-//                UsernamePasswordAuthenticationToken authToken =
-//                        new UsernamePasswordAuthenticationToken(
-//                                userDetails,
-//                                null,
-//                                userDetails.getAuthorities()
-//                        );
-//                authToken.setDetails(
-//                        new WebAuthenticationDetailsSource()
-//                                .buildDetails(request)
-//                );
-//                SecurityContextHolder.getContext().setAuthentication(authToken);
-//            }
-//        }
-        return ResponseEntity.ok(currentUser.get());
+        else {
+            cartService.transferCartUponLogin(userIdFromCookie, authHeader, response);
+        }
+        return ResponseEntity.ok(currentUser);
     }
 }

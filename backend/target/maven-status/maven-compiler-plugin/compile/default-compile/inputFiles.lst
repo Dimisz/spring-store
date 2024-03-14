@@ -1,3 +1,4 @@
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/web/AuthenticationControllerAdvice.java
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/web/CartController.java
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/CatalogServiceApplication.java
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/cart/CartService.java
@@ -18,6 +19,7 @@
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/product/ProductAlreadyExistsException.java
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/product/ProductNotFoundException.java
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/cart/NegativeQuantityException.java
+/Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/user/UserDTO.java
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/web/ProductController.java
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/domain/cart/CartItem.java
 /Users/vs/Desktop/spring-store/backend/src/main/java/com/uningen/estore/config/JwtAuthenticationFilter.java

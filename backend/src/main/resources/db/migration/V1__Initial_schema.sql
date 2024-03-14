@@ -15,7 +15,7 @@ CREATE TABLE app_user (
 );
 
 CREATE TABLE carts (
-     id BIGINT AUTO_INCREMENT NOT NULL,
+     id varchar(255) NOT NULL,
      PRIMARY KEY (id)
 );
 
@@ -35,9 +35,10 @@ CREATE TABLE product (
 );
 
 CREATE TABLE cart_product_mapping (
-     cart_product INTEGER,
-     cart_id BIGINT NOT NULL,
+     product_qty INTEGER,
+     cart_id varchar(255) NOT NULL,
      product_id BIGINT NOT NULL,
      PRIMARY KEY (cart_id, product_id),
      FOREIGN KEY (cart_id) REFERENCES carts (id)
+     ON DELETE CASCADE
 );

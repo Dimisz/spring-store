@@ -22,6 +22,20 @@ public class JwtService {
         return extractClaim(jwtToken, Claims::getSubject);
     }
 
+//    public boolean isJwtTokenValidAndUserEmailExists(String authHeader){
+//
+//    }
+    public String extractEmailOrGetNull(String jwtToken){
+        String userId = null;
+        if(jwtToken != null && jwtToken.startsWith("Bearer ")) {
+            String token = jwtToken.substring(7); //"Bearer <token>"
+            // extract userEmail from token
+            String extractedEmail = extractUserEmail(token);
+            if(extractedEmail != null) userId = extractedEmail;
+        }
+        return userId;
+    }
+
     public <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver){
         final Claims claims = extractAllClaims(jwtToken);
         return claimsResolver.apply(claims);

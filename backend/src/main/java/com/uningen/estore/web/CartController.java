@@ -1,27 +1,28 @@
 package com.uningen.estore.web;
 
+import com.uningen.estore.config.JwtService;
 import com.uningen.estore.domain.cart.*;
 import com.uningen.estore.domain.product.ProductNotFoundException;
 import com.uningen.estore.domain.product.ProductService;
+import com.uningen.estore.domain.user.AppUserRepository;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("cart")
+@RequiredArgsConstructor
 public class CartController {
     private final ProductService productService;
     private final CartService cartService;
+    private final JwtService jwtService;
+    private final AppUserRepository appUserRepository;
 
-    public CartController(ProductService productService, CartService cartService) {
-        this.productService = productService;
-        this.cartService = cartService;
-    }
 
 //    @PostMapping
 //    public ResponseEntity<Cart> createCart(){
@@ -37,35 +38,25 @@ public class CartController {
     @PostMapping
     public ResponseEntity<CartDTO> addProductToCart(
             @RequestParam Long productId,
-            @RequestParam int quantity
+            @RequestParam int quantity,
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
+            @CookieValue(value = "userid", defaultValue = "unknown") String userIdFromCookie,
+            HttpServletResponse response
     ){
         if(quantity <= 0) throw new NegativeQuantityException(quantity);
-        Cart cart = cartService.getCartById(1L).isPresent() ? cartService.getCartById(1L).get() : null;
-        Map<Long, Integer> cartItems;
+        Cart cart = cartService.transferCartUponLogin(userIdFromCookie, authHeader, response);
+        Map<Long, Integer> cartItems = cart.getCartProducts();
         if(!productService.existsById(productId)) throw new ProductNotFoundException(productId);
         if(productService.checkAvailability(productId, quantity)){
-            if(cart == null) {
-                cartItems = new HashMap<>();
+            if(cartItems.containsKey(productId)){
+                cartItems.put(productId, cartItems.get(productId) + quantity);
+                productService.editProductQuantity(productId, -quantity);
+            }
+            else {
                 cartItems.put(productId, quantity);
                 productService.editProductQuantity(productId, -quantity);
-                cart = Cart.of(cartItems);
-//                return new ResponseEntity<>(cartService.saveCart(cart), HttpStatus.CREATED);
-//                cartService.saveCart(cart);
-//                return new ResponseEntity<>(Optional.of(cartService.getCartDTO(Optional.of(cart))), HttpStatus.OK);
-                return new ResponseEntity<>(cartService.saveCartAndGetDTO(cart), HttpStatus.OK);
             }
-            else{
-                cartItems = cart.getCartProducts();
-                if(cartItems.containsKey(productId)){
-                    cartItems.put(productId, cartItems.get(productId) + quantity);
-                    productService.editProductQuantity(productId, -quantity);
-                }
-                else {
-                    cartItems.put(productId, quantity);
-                    productService.editProductQuantity(productId, -quantity);
-                }
-                return new ResponseEntity<>(cartService.saveCartAndGetDTO(cart), HttpStatus.OK);
-            }
+            return new ResponseEntity<>(cartService.saveCartAndGetDTO(cart), HttpStatus.OK);
         }
         throw new InsufficientQuantityAvailableException(productId, quantity);
     }
@@ -74,13 +65,13 @@ public class CartController {
 //    public ResponseEntity<Cart> removeProductFromCart(
     public ResponseEntity<CartDTO> removeProductFromCart(
             @RequestParam Long productId,
-            @RequestParam int quantity
+            @RequestParam int quantity,
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
+            @CookieValue(value = "userid", defaultValue = "unknown") String userIdFromCookie,
+            HttpServletResponse response
     ){
         if(quantity <= 0) throw new NegativeQuantityException(quantity);
-        Long cartId = 1L;
-
-        Cart cart = cartService.getCartById(cartId).isPresent() ? cartService.getCartById(cartId).get() : null;
-        if(cart == null) throw new CartNotFoundException(cartId);
+        Cart cart = cartService.transferCartUponLogin(userIdFromCookie, authHeader, response);
 
         if(productService.existsById(productId)){
             Map<Long, Integer> cartItems = cart.getCartProducts();
@@ -119,8 +110,8 @@ public class CartController {
 //        return cartService.getCartDetailsById(id);
 //    }
 
-    @GetMapping
-    public Optional<CartDTO> getCart(){
-        return cartService.getCart();
-    }
+//    @GetMapping
+//    public Optional<CartDTO> getCart(){
+//        return cartService.getCart();
+//    }
 }

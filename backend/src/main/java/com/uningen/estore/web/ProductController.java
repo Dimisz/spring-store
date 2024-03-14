@@ -3,6 +3,9 @@ package com.uningen.estore.web;
 import com.uningen.estore.domain.product.Product;
 import com.uningen.estore.domain.product.ProductFilters;
 import com.uningen.estore.domain.product.ProductService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -11,8 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("products")
 public class ProductController {
@@ -44,8 +48,23 @@ public class ProductController {
             @RequestParam String orderBy,
             @RequestParam(required = false) List<String> brands,
             @RequestParam(required = false) List<String> categories,
-            @RequestParam(required = false) String searchTerm
+            @RequestParam(required = false) String searchTerm,
+            @CookieValue(value = "userid", defaultValue = "unknown") String userIdFromCookie,
+            HttpServletResponse httpServletResponse
     ){
+        // as soon as user enters the app, random id is assigned
+        // the id is stored as a cookie to track user actions
+        // before user logs in
+        // upon successful login the cookie is deleted and real userId is used
+        if(userIdFromCookie.equals("unknown")){
+            Cookie cookie = new Cookie("userid", UUID.randomUUID().toString());
+            cookie.setMaxAge(7 * 24 * 60 * 10);
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            httpServletResponse.addCookie(cookie);
+        }
+
         return productService.findProductsPaginated(pageNumber, pageSize, orderBy, brands, categories, searchTerm);
     }
 
@@ -55,7 +74,7 @@ public class ProductController {
 //    }
 
     @GetMapping("filters")
-    public ProductFilters getFilters(){
+    public ProductFilters getFilters(HttpServletRequest httpServletRequest){
         Set<String> brands = new HashSet<>();
         Set<String> types = new HashSet<>();
         Iterable<Product> products = productService.viewProductList();
@@ -66,6 +85,10 @@ public class ProductController {
         ProductFilters filters = new ProductFilters();
         filters.setBrands(brands);
         filters.setTypes(types);
+
+//        HttpSession session = httpServletRequest.getSession();
+//        session.setAttribute("userid", "sessionUserId");
+
         return filters;
     }
 

@@ -11,12 +11,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.uningen.estore.domain.user.Role.USER;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     //    private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**",
 //            "/v2/api-docs",
 //            "/v3/api-docs",
@@ -30,12 +32,13 @@ public class SecurityConfig {
 //            "/swagger-ui.html"};
     private static final String[] WHITE_LIST_URL = {
             "/account/**",
-            "/catalog/**",
+            "/**",
+            "/products/**",
             "/cart/**"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    //    private final LogoutHandler logoutHandler;
+//    private final LogoutHandler logoutHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
@@ -43,6 +46,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req ->
                                 req.requestMatchers(WHITE_LIST_URL)
                                         .permitAll()
+                                        .requestMatchers("/account/currentUser").hasAnyRole(USER.name())
 //                                .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
 //                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
 //                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
@@ -55,7 +59,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 //                .logout(logout ->
-//                        logout.logoutUrl("/api/v1/auth/logout")
+//                        logout.logoutUrl("/logout")
 //                                .addLogoutHandler(logoutHandler)
 //                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
 //                )
