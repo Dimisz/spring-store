@@ -26,20 +26,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-//    @GetMapping
-//    public Iterable<Product> getAllProducts(){
-//        return productService.viewProductList();
-//    }
-
-////    @GetMapping("/paginated")
-//    @GetMapping
-//    public HttpResponse<PagedListHolder<Product>> getAllProductsPaginated(
-//            @RequestParam int pageNumber,
-//            @RequestParam int pageSize,
-//            @RequestParam String orderBy
-//            ){
-//        return productService.findAllProductsPaginated(pageNumber, pageSize, orderBy);
-//    }
 
     @GetMapping
     public Page<Product> getProductsPaginated(
@@ -58,7 +44,7 @@ public class ProductController {
         // upon successful login the cookie is deleted and real userId is used
         if(userIdFromCookie.equals("unknown")){
             Cookie cookie = new Cookie("userid", UUID.randomUUID().toString());
-            cookie.setMaxAge(7 * 24 * 60 * 10);
+            cookie.setMaxAge(12 * 60 * 60); // 12 hours
             cookie.setSecure(true);
             cookie.setHttpOnly(true);
             cookie.setPath("/");
@@ -67,11 +53,6 @@ public class ProductController {
 
         return productService.findProductsPaginated(pageNumber, pageSize, orderBy, brands, categories, searchTerm);
     }
-
-//    @GetMapping("brand")
-//    public Page<Product> getByBrand(@RequestParam(required = false) List<String> brand, @RequestParam(required = false) List<String> category){
-//        return productService.findAllByBrand(brand, category);
-//    }
 
     @GetMapping("filters")
     public ProductFilters getFilters(HttpServletRequest httpServletRequest){

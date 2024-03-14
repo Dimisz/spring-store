@@ -61,6 +61,7 @@ export const accountSlice = createSlice({
     signOut: (state) => {
       state.user = null;
       localStorage.removeItem('user');
+      agent.Account.logout();
       router.navigate('/');
     },
     setUser: (state, action) => {
@@ -69,9 +70,11 @@ export const accountSlice = createSlice({
   },
   extraReducers: (builder => {
     builder.addCase(fetchCurrentUser.rejected, (state) => {
+      toast.error('Session expired - please login again');
       state.user = null;
       localStorage.removeItem('user');
-      toast.error('Session expired - please login again');
+      agent.Account.logout();
+      window.location.reload();
       router.navigate('/');
 
     });

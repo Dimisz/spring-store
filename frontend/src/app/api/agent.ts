@@ -51,6 +51,10 @@ axios.interceptors.response.use((response) => {
     case 401:
       toast.error(data.title);
       break;
+    case 403:
+        toast.error("Please, login or register to proceed");
+        router.navigate('/login');
+        break;
     case 404:
       router.navigate('/not-found');
       // toast.error(data.title);
@@ -93,7 +97,8 @@ const Cart = {
 }
 
 const Account = {
-  login: (values: any) => requests.post('account/login', values), 
+  login: (values: any) => requests.post('account/login', values),
+  logout: () => requests.get('account/logout'), 
   register: (values: any) => requests.post('account/register', values), 
   currentUser: () => requests.get('account/currentUser'),
   fetchAddress: () => requests.get('account/savedAddress')

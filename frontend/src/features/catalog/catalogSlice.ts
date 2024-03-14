@@ -51,8 +51,6 @@ export const fetchAllProductsAsync = createAsyncThunk<Product[], void, {state: R
         totalCount: response.totalElements
       }));
 
-      // comment out original 
-      // return response.items;
       return response.content;
     }
     catch(error: any){

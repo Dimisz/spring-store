@@ -29,7 +29,7 @@ public class CartService {
                 cartItems.add(new CartItem(product, productQty));
             }
         }
-        return new CartDTO(null, existingCart.getId(), cartItems, "payment intent", "client secret");
+        return new CartDTO(existingCart.getId(), existingCart.getId(), cartItems, "payment intent", "client secret");
     }
 
     public Optional<CartDTO> getCartDTOByEmail(String email){
@@ -69,24 +69,26 @@ public class CartService {
     }
 
     public Cart transferCartUponLogin(String userIdFromCookie, String authHeader, HttpServletResponse response){
-        String userId = userIdFromCookie;
-
         String extractedEmail = jwtService.extractEmailOrGetNull(authHeader);
         // user just logged in -> transfer anonymous cart
-        Cart cart;
+        Cart cart = new Cart();
         if(extractedEmail != null){
-            if(cartRepository.findById(extractedEmail).isPresent()){
-                cart = cartRepository.findById(extractedEmail).get();
+            Optional<Cart> optionallyExistingUserCart = cartRepository.findById(extractedEmail);
+            if(optionallyExistingUserCart.isPresent()){
+                cart = optionallyExistingUserCart.get();
                 if(!userIdFromCookie.equals("unknown")){
-                    if(cartRepository.findById(userIdFromCookie).isPresent()){
-                        Cart anonymousCart = cartRepository.findById(userIdFromCookie).get();
+                    Optional<Cart> optionallyExistingAnonymousCart = cartRepository.findById(userIdFromCookie);
+                    if(optionallyExistingAnonymousCart.isPresent()){
+                        Cart anonymousCart = optionallyExistingAnonymousCart.get();
                         Map<Long, Integer> productFromAnonymousCart = anonymousCart.getCartProducts();
-                        Map<Long, Integer> copiedProducts = new HashMap<>();
-                        for(Long productId : productFromAnonymousCart.keySet()){
-                            copiedProducts.put(productId, productFromAnonymousCart.get(productId));
+                        if(productFromAnonymousCart != null && !productFromAnonymousCart.isEmpty()){
+                            Map<Long, Integer> copiedProducts = new HashMap<>();
+                            for(Long productId : productFromAnonymousCart.keySet()){
+                                copiedProducts.put(productId, productFromAnonymousCart.get(productId));
+                                cart.setCartProducts(copiedProducts);
+                            }
                         }
                         cartRepository.removeById(userIdFromCookie);
-                        cart.setCartProducts(copiedProducts);
 //                        cartRepository.removeById(userIdFromCookie);
                     }
                 }
@@ -94,8 +96,9 @@ public class CartService {
                 return cart;
             }
             else if(!userIdFromCookie.equals("unknown")){
-                if(cartRepository.findById(userIdFromCookie).isPresent()){
-                    Cart anonymousCart = cartRepository.findById(userIdFromCookie).get();
+                Optional<Cart> optionallyExistingAnonymousCart = cartRepository.findById(userIdFromCookie);
+                if(optionallyExistingAnonymousCart.isPresent()){
+                    Cart anonymousCart = optionallyExistingAnonymousCart.get();
                     Map<Long, Integer> productFromAnonymousCart = anonymousCart.getCartProducts();
                     Map<Long, Integer> copiedProducts = new HashMap<>();
                     for(Long productId : productFromAnonymousCart.keySet()){
@@ -107,6 +110,11 @@ public class CartService {
                     clearCookie(response);
                     return cart;
                 }
+                else {
+                    cart = new Cart(extractedEmail, new HashMap<Long, Integer>());
+                    clearCookie(response);
+                    return cart;
+                }
             }
             else {
                 cart = new Cart(extractedEmail, new HashMap<Long, Integer>());
@@ -115,8 +123,9 @@ public class CartService {
             }
         }
         else if(!userIdFromCookie.equals("unknown")){
-            if(cartRepository.findById(userIdFromCookie).isPresent()){
-                cart = cartRepository.findById(userIdFromCookie).get();
+            Optional<Cart> optionallyExistingAnonymousCart = cartRepository.findById(userIdFromCookie);
+            if(optionallyExistingAnonymousCart.isPresent()){
+                cart = optionallyExistingAnonymousCart.get();
                 return cart;
             }
             else {

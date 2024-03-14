@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CartDTO {
-    private Long cartId;
+    private String cartId;
     private String buyerId; // added later
     private List<CartItem> items;
     private String paymentIntentId; // used later for payments

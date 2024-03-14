@@ -15,24 +15,6 @@ const HomePage = () => {
   // }
 
   return(
-    // <>
-    //   <Slider {...settings}>
-    //     <div>
-    //       <img src='https://i.ibb.co/VpW4x5t/roll-up-jean-shirt.png' alt='hero1' style={{display: 'block', maxHeight: '50vh'}}/>
-    //     </div>
-    //     <div>
-    //       <img src='https://i.ibb.co/N3BN1bh/red-polka-dot-dress.png' alt='hero2' style={{display: 'block', maxHeight: '50vh'}}/>
-    //     </div>
-    //     <div>
-    //       <img src='https://i.ibb.co/fMTV342/nike-brown.png' alt='hero3' style={{display: 'block', maxHeight: '50vh'}}/>
-    //     </div>
-    //   </Slider>
-    //   <Box display='flex'justifyContent='center' sx={{p:4}}>
-    //     <Typography variant='h1'>
-    //       Welcome to the shop!
-    //     </Typography>
-    //   </Box>
-    // </>
     <Paper sx={{p: 2}}>
       <Typography variant='h5' align='center' pt={2} pb={2}>
         Hi there! My name is Vladimir and I'm a Fullstack Developer.

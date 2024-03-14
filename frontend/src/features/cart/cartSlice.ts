@@ -25,7 +25,7 @@ export const fetchCartAsync = createAsyncThunk<Cart>(
   },
   {
     condition: () => {
-      if(!getCookie('buyerId')) return false;
+      if(!getCookie('userid')) return false;
     }
   }
 )
