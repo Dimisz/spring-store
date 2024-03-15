@@ -23,7 +23,7 @@ interface Props {
 
 const Header = ({ darkMode, toggleTheme }: Props) => {
   const { cart } = useAppSelector((state) => state.cart);
-  console.log(cart);
+  // console.log(cart);
 
   const itemsCount = cart?.items.reduce((totalQty, item) => {
     return totalQty + item.quantity;

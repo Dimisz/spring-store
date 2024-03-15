@@ -1,5 +1,6 @@
 package com.uningen.estore.domain.product;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -8,12 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     public Iterable<Product> viewProductList(){
         return productRepository.findAll();
@@ -60,9 +58,6 @@ public class ProductService {
         }
     }
 
-//    public List<Product> viewProductsByCategory(String category){
-//        return this.productRepository.findAllByCategory(category);
-//    }
 
     public Product viewProductDetails(Long id){
         return productRepository.findById(id)

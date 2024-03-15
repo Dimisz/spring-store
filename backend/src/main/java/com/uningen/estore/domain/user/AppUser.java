@@ -1,5 +1,6 @@
 package com.uningen.estore.domain.user;
 
+import com.uningen.estore.domain.order.ShippingAddress;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,9 +33,11 @@ public class AppUser implements UserDetails {
     private String email;
     private String userPassword;
 
-    // when using enum
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Embedded
+    private ShippingAddress shippingAddress;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

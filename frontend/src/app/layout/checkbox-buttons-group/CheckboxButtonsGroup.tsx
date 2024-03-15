@@ -1,6 +1,5 @@
-import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import { useEffect, useState } from "react";
-
+import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 interface Props {
   items: string[];
@@ -9,11 +8,17 @@ interface Props {
   resettable: boolean;
   setResettable: (value: boolean) => void;
 }
-const CheckboxButtonsGroup = ({ items, checked, onChange, resettable, setResettable }:Props) => {
+const CheckboxButtonsGroup = ({
+  items,
+  checked,
+  onChange,
+  resettable,
+  setResettable,
+}: Props) => {
   const [checkedItems, setCheckedItems] = useState(checked || []);
 
   useEffect(() => {
-    if(resettable){
+    if (resettable) {
       setCheckedItems([]);
       setResettable(false);
     }
@@ -22,31 +27,31 @@ const CheckboxButtonsGroup = ({ items, checked, onChange, resettable, setResetta
   const handleChecked = (value: string) => {
     const currentIndex = checkedItems.findIndex((item) => item === value);
     let newChecked: string[] = [];
-    if(currentIndex === -1) newChecked = [...checkedItems, value];
+    if (currentIndex === -1) newChecked = [...checkedItems, value];
     else newChecked = checkedItems.filter((item) => item !== value);
     setCheckedItems(newChecked);
     onChange(newChecked);
-    console.log(newChecked);
-  }
+    // console.log(newChecked);
+  };
 
-  return(
+  return (
     <FormGroup>
       {items.map((item) => {
-        return(
-          <FormControlLabel 
+        return (
+          <FormControlLabel
             control={
-              <Checkbox 
+              <Checkbox
                 checked={checkedItems.indexOf(item) !== -1}
                 onClick={() => handleChecked(item)}
               />
-            } 
-            label={item} 
-            key={item} 
+            }
+            label={item}
+            key={item}
           />
         );
       })}
     </FormGroup>
   );
-}
+};
 
 export default CheckboxButtonsGroup;

@@ -23,18 +23,6 @@ public class CartController {
     private final JwtService jwtService;
     private final AppUserRepository appUserRepository;
 
-
-//    @PostMapping
-//    public ResponseEntity<Cart> createCart(){
-//        Map<Long, Integer> cartItems = new HashMap<>();
-//        cartItems.put(2L, 5);
-//        cartItems.put(4L,2);
-//        cartItems.put(6L, 1);
-//        Cart cart = Cart.of(cartItems);
-//        cartService.saveCart(cart);
-//        return new ResponseEntity<>(cart, HttpStatus.CREATED);
-//    }
-
     @PostMapping
     public ResponseEntity<CartDTO> addProductToCart(
             @RequestParam Long productId,
@@ -62,7 +50,6 @@ public class CartController {
     }
 
     @DeleteMapping
-//    public ResponseEntity<Cart> removeProductFromCart(
     public ResponseEntity<CartDTO> removeProductFromCart(
             @RequestParam Long productId,
             @RequestParam int quantity,
@@ -85,10 +72,6 @@ public class CartController {
                     cartItems.put(productId, finalQty);
                     productService.editProductQuantity(productId, quantity);
                 }
-
-//                return new ResponseEntity<>(cartService.saveCart(cart), HttpStatus.OK);
-//                cartService.saveCart(cart);
-//                return new ResponseEntity<>(Optional.of(cartService.getCartDTO(Optional.of(cart))), HttpStatus.OK);
                 return new ResponseEntity<>(cartService.saveCartAndGetDTO(cart), HttpStatus.OK);
             }
             else {
@@ -97,21 +80,4 @@ public class CartController {
         }
         throw new ProductNotFoundException(productId);
     }
-
-    // http://localhost:8001/cart?productId=46&quantity=2
-
-//    @GetMapping
-//    public Iterable<Cart> getAllCarts(){
-//        return cartService.getAllCarts();
-//    }
-
-//    @GetMapping("{id}")
-//    public Optional<CartDTO> getCartById(@PathVariable Long id){
-//        return cartService.getCartDetailsById(id);
-//    }
-
-//    @GetMapping
-//    public Optional<CartDTO> getCart(){
-//        return cartService.getCart();
-//    }
 }

@@ -22,9 +22,12 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
     private static final String[] WHITE_LIST_URL = {
             "/account/**",
+            "/account/login",
+            "/account/logout",
+            "/account/currentUser",
             "/**",
             "/products/**",
-            "/cart/**"
+            "/cart/**",
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -36,20 +39,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req ->
                                 req.requestMatchers(WHITE_LIST_URL)
                                         .permitAll()
-                                        .requestMatchers("/account/currentUser").hasAnyRole(USER.name())
-//                                .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
-//                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-//                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-//                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-//                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//                                        .requestMatchers("/account/currentUser").hasAnyRole(USER.name())
+                                        .requestMatchers("/orders").hasAnyRole(USER.name())
+                                        .requestMatchers("/orders/**").hasAnyRole(USER.name())
+//                                        .requestMatchers("/orders/**").hasAnyRole(USER.name())
                                         .anyRequest()
                                         .authenticated()
 
                 )
-//                .formLogin(formLogin -> formLogin
-//                        .loginPage("/account/login")
-//                        .failureHandler(new AuthFailureHandler())
-//                        .permitAll())
+
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

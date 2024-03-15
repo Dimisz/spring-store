@@ -20,6 +20,9 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
     try {
       const userDto = await agent.Account.login(data);
       const { cart, ...user } = userDto;
+      // console.log("currentUser received by accountSlice.login");
+      // console.log(userDto);
+
       if(cart) thunkApi.dispatch(setCart(cart));
 
       localStorage.setItem('user', JSON.stringify(user));
@@ -37,6 +40,8 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     thunkApi.dispatch(setUser(JSON.parse(localStorage.getItem('user')!)));
     try {
       const userDto = await agent.Account.currentUser();
+      // console.log("currentUser received by accountSlice");
+      // console.log(userDto);
       const { cart, ...user } = userDto;
       if(cart) thunkApi.dispatch(setCart(cart));
       
@@ -73,8 +78,8 @@ export const accountSlice = createSlice({
       toast.error('Session expired - please login again');
       state.user = null;
       localStorage.removeItem('user');
-      agent.Account.logout();
-      window.location.reload();
+      // agent.Account.logout();
+      // window.location.reload();
       router.navigate('/');
 
     });

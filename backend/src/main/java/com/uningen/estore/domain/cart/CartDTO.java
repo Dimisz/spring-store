@@ -16,8 +16,8 @@ import java.util.List;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CartDTO {
     private String cartId;
-    private String buyerId; // added later
+    private String buyerId;
     private List<CartItem> items;
-    private String paymentIntentId; // used later for payments
-    private String clientSecret; // used later for payments
+    private String paymentIntentId; // used for payments with stripe
+    private String clientSecret; // used for payments with stripe
 }

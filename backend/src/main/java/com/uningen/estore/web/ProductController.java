@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,9 @@ import java.util.UUID;
 //@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("products")
+@RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-
 
     @GetMapping
     public Page<Product> getProductsPaginated(
@@ -66,9 +63,6 @@ public class ProductController {
         ProductFilters filters = new ProductFilters();
         filters.setBrands(brands);
         filters.setTypes(types);
-
-//        HttpSession session = httpServletRequest.getSession();
-//        session.setAttribute("userid", "sessionUserId");
 
         return filters;
     }

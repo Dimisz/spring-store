@@ -6,7 +6,10 @@ import com.uningen.estore.auth.AuthenticationService;
 import com.uningen.estore.auth.RegisterRequest;
 import com.uningen.estore.config.JwtService;
 import com.uningen.estore.domain.cart.CartService;
+import com.uningen.estore.domain.order.ShippingAddress;
+import com.uningen.estore.domain.user.AppUser;
 import com.uningen.estore.domain.user.AppUserRepository;
+import com.uningen.estore.domain.user.EmailAlreadyRegisteredException;
 import com.uningen.estore.domain.user.UserDTO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,13 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 //@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/account")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AccountController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
@@ -32,6 +36,10 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ){
+        String email = request.getEmail();
+        if(appUserRepository.findByEmail(email).isPresent()){
+            throw new EmailAlreadyRegisteredException(email);
+        }
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
@@ -88,5 +96,14 @@ public class AuthenticationController {
             return ResponseEntity.ok(currentUser);
         }
 //        throw new UsernameNotFoundException("Who are you?");
+    }
+
+    @GetMapping("/savedAddress")
+    public ResponseEntity<ShippingAddress> getSavedAddressOrNull(@RequestHeader(value = "Authorization") String authHeader){
+        String jwtToken = authHeader.substring(7); //"Bearer <token>"
+        Optional<AppUser> optionalUser = appUserRepository.findByEmail(jwtService.extractUserEmail(jwtToken));
+        ShippingAddress shippingAddress = optionalUser.isPresent() ?
+                optionalUser.get().getShippingAddress() : null;
+        return ResponseEntity.ok(shippingAddress);
     }
 }

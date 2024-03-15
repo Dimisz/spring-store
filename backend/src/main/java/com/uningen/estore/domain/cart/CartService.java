@@ -37,24 +37,9 @@ public class CartService {
         return Optional.ofNullable(getCartDTO(cart));
     }
 
-    // CHECK HOW TO ASSIGN ID AFTER AUTH
-    public Optional<CartDTO> getCart(String email){
-        return getCartDTOByEmail(email);
-    }
-
-//    public void changeCartUserEmail(Cart cart, String userEmail){
-//        cart.setUserEmail(userEmail);
-//        cartRepository.save(cart);
-//    }
-
     public Optional<Cart> getCartById(String id){
         return cartRepository.findById(id);
     }
-
-//    public Optional<Cart> getCartByEmail(String userEmail){
-//        return cartRepository.findById(userEmail);
-//    }
-
 
     public Cart saveCart(Cart cart){
         return cartRepository.save(cart);
@@ -62,10 +47,6 @@ public class CartService {
 
     public CartDTO saveCartAndGetDTO(Cart cart){
         return getCartDTO(Optional.of(cartRepository.save(cart)));
-    }
-
-    public Iterable<Cart> getAllCarts(){
-        return cartRepository.findAll();
     }
 
     public Cart transferCartUponLogin(String userIdFromCookie, String authHeader, HttpServletResponse response){
@@ -89,7 +70,6 @@ public class CartService {
                             }
                         }
                         cartRepository.removeById(userIdFromCookie);
-//                        cartRepository.removeById(userIdFromCookie);
                     }
                 }
                 clearCookie(response);
@@ -106,7 +86,6 @@ public class CartService {
                     }
                     cartRepository.removeById(userIdFromCookie);
                     cart = new Cart(extractedEmail, copiedProducts);
-//                    cart.setUserEmail(extractedEmail);
                     clearCookie(response);
                     return cart;
                 }

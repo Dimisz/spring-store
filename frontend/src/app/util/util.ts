@@ -4,5 +4,8 @@ export const getCookie = (key: string) => {
 }
 
 export const formatCurrency = (amount: number) => {
-  return amount / 100;
+  // when working with stripe should use Longs and divide by 100 only to shape
+  // the dispplayed numbers
+  // return amount / 100;
+  return amount;
 }
